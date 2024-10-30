@@ -62,22 +62,3 @@ func decompress*(data: openArray[byte], maxLength: Natural): seq[byte] =
 
         for i in start ..< start + realLength:
           result.add(result[i])
-
-when isMainModule:
-  block:
-    var f = open("LICENSE.lzf")
-    defer:
-      f.close()
-
-    let filesize = f.getFileSize()
-
-    var cbuf =
-      when (NimMajor, NimMinor, NimPatch) >= (2, 1, 0):
-        # What other functions are renamed like this...?
-        newSeqUninit[byte](filesize)
-      else:
-        newSeqUninitialized[byte](filesize)
-    discard f.readBytes(cbuf, 0, len(cbuf))
-
-    let dc = decompress(cbuf[4 ..^ 1], 0x435)
-    stdout.write cast[string](dc)

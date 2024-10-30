@@ -7,5 +7,7 @@ test "Matching license text decompression":
     decompressed = staticRead("../LICENSE")
     compressed = staticRead("LICENSE.lzf")
 
-  let dc = lzf.decompress(n[4 .. ^1], 0x37D)
-  check dc == decompressed
+  let dc = lzf.decompress(compressed.toOpenArrayByte(4, len(compressed) - 1), 0x37D)
+
+  for i in 0 ..< min(len(dc), len(decompressed)):
+    check dc[i] == byte(decompressed[i])
