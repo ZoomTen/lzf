@@ -18,8 +18,8 @@
 ##   yyyyyyyyyyyyy
 ##
 
-import ./lzf/exceptions
+import ./lzf/exceptions as exceptions
 export exceptions
 
-import ./lzf/decompress
-export decompress
+import ./lzf/decompress as decompress
+export decompress.decompress
