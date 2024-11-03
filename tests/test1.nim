@@ -7,25 +7,22 @@ test "Matching license text decompression":
     decompressed = staticRead("../LICENSE")
     compressed = staticRead("LICENSE.lzf")
 
-  let dc = lzf.decompress(compressed.toOpenArrayByte(0, len(compressed) - 1))
+  let myDecompressed =
+    lzf.decompress(compressed.toOpenArrayByte(0, len(compressed) - 1))
 
-  check len(dc) == len(decompressed)
+  check len(myDecompressed) == len(decompressed)
 
-  for i in 0 ..< len(dc):
-    check dc[i] == byte(decompressed[i])
+  for i in 0 ..< len(myDecompressed):
+    check myDecompressed[i] == byte(decompressed[i])
 
 test "Compress license text":
-  skip()
-  when false:
-    const decompressedS = staticRead("../LICENSE")
-    let decompressed = decompressedS
-    var x = newSeq[byte](len(decompressed) * 2)
-    let res = lzf.compress(
-      cast[ptr byte](decompressed[0].addr), len(decompressed), x[0].addr, 1000
-    )
-    echo cast[seq[char]](decompressed).repr
-    echo cast[seq[char]](x).repr
-    check res == 0x37D
+  const originalStatic = staticRead("../LICENSE")
+  let original = originalStatic
+  let roundtripped =
+    lzf.decompress(lzf.compress(original.toOpenArrayByte(0, len(original) - 1)))
+  check len(original) == len(roundtripped)
+  for i in 0 ..< len(original):
+    check byte(original[i]) == roundtripped[i]
 
 test "Not enough data for literal (missing argument)":
   expect lzf.IncompleteDataError:

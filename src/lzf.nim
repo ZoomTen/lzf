@@ -23,3 +23,7 @@ export exceptions
 
 import ./lzf/decompress as decompress
 export decompress.decompress
+
+when not defined(js):
+  import ./lzf/compress_c as compress
+  export compress.compress
