@@ -3,15 +3,11 @@ import ./exceptions
 type uint3 = 0b000 .. 0b111
 
 {.push boundChecks: off, overflowChecks: off.}
-func decompress*(data: openArray[byte], maxLength: Natural): seq[byte] =
+func decompress*(data: openArray[byte]): seq[byte] =
   let dataLen = len(data)
   var index = 0
 
-  while index < maxLength:
-    if index >= dataLen:
-      # we ran out of data
-      break
-
+  while index < dataLen:
     var currentByte = data[index]
     inc index
 
